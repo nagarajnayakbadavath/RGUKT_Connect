@@ -1,0 +1,18 @@
+{
+  "name": "rgukt_connect_be",
+  "version": "1.0.0",
+  "description": "This is the Web Application for our RGUKT \r <br>\r For Easier Connetion between Alumni/Seniors and Students(Juniors).",
+  "main": "index.js",
+  "scripts": {
+    "bns": "nodemon node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "mongoose": "^8.10.1",
+    "nodemon": "^3.1.9"
+  }
+}
