@@ -47,7 +47,6 @@ requestRouter.get("/requests/recieved",userAuth,async(req,res)=>{
         //Here only those user can come how are authenticated by logging in through userAuth
         //Here now receiver logged in and checks the requests that he/she got
         const myId=req.user._id;
-        console.log(myId);
         const users=await connectionRequest.find({receiverId:myId, status:'pending'});
         if(!users){
             return res.status(400).send("user not found here");

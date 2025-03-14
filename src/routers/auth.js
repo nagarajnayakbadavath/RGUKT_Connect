@@ -9,7 +9,7 @@ const {validateSignupData}=require('../utils/validation');
 authRouter.post("/signup",async(req,res)=>{
     try{
     validateSignupData(req);
-    const {firstName,lastName,emailId,password,about}=req.body;
+    const {firstName,lastName,emailId,password,about,photourl,skills}=req.body;
     const passwordHash=await bcrypt.hash(password,10); 
     const user=new User({
         firstName,
@@ -17,11 +17,13 @@ authRouter.post("/signup",async(req,res)=>{
         emailId,
         password:passwordHash,
         about,
+        skills,
+        photourl,
     });
     await user.save();
     res.send(user);
     }catch(err){
-        res.status(400).send("not enetered the user");
+        res.status(400).send(err.message);
     }
 });
 
@@ -53,6 +55,16 @@ authRouter.post("/logout",async(req,res)=>{
         res.send("logged out successfully");
     }catch(err){
         res.status(400).send(err);
+    }
+});
+
+authRouter.get("/users",async(req,res)=>{
+    try{
+        const user=await User.find();
+        console.log(user);
+        res.send(user);
+    }catch(err){
+        res.status(400).send(err.message);
     }
 });
 
