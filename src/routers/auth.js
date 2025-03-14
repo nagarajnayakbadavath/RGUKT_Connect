@@ -27,25 +27,57 @@ authRouter.post("/signup",async(req,res)=>{
     }
 });
 
-authRouter.post("/login",async(req,res)=>{
-    try{
-        const {emailId,password}=req.body;
-        const newuser=await User.findOne({emailId});
-        if(!newuser){
+// authRouter.post("/login",async(req,res)=>{
+//     try{
+//         const {emailId,password}=req.body;
+//         const newuser=await User.findOne({emailId});
+//         if(!newuser){
+//             throw new Error("user not found");
+//         }
+//         const isPasswordValid=await bcrypt.compare(password,newuser.password);
+//         if(isPasswordValid){
+//             const token=jwt.sign({_id:newuser._id},"rgukt@connects$790");
+//             res.cookie("token",token);
+//             res.send(newuser);
+//         }else{
+//             res.send("login unsuccessfull");
+//         }
+//     }catch(err){
+//         res.status(400).send(err.message);
+//     }
+// });
+
+authRouter.post("/login", async (req, res) => {
+    try {
+        const { emailId, password } = req.body;
+        const newuser = await User.findOne({ emailId });
+
+        if (!newuser) {
             throw new Error("user not found");
         }
-        const isPasswordValid=await bcrypt.compare(password,newuser.password);
-        if(isPasswordValid){
-            const token=jwt.sign({_id:newuser._id},"rgukt@connects$790");
-            res.cookie("token",token);
-            res.send(newuser);
-        }else{
-            res.send("login unsuccessfull");
+
+        const isPasswordValid = await bcrypt.compare(password, newuser.password);
+
+        if (isPasswordValid) {
+            const token = jwt.sign({ _id: newuser._id }, "rgukt@connects$790");
+
+            // Set cookie with proper options
+            res.cookie("token", token, {
+                httpOnly: true,
+                secure: true,        // Important on Vercel (HTTPS)
+                sameSite: 'None',    // Allow frontend from another origin
+                maxAge: 24 * 60 * 60 * 1000 // 1 day in ms (optional)
+            });
+
+            res.status(200).send(newuser);
+        } else {
+            res.status(401).send("Login unsuccessful");
         }
-    }catch(err){
+    } catch (err) {
         res.status(400).send(err.message);
     }
 });
+
 
 authRouter.post("/logout",async(req,res)=>{
     try{
