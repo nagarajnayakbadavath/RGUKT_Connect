@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: 'https://rgukt-connect-fe.vercel.app',
+  origin: 'https://rgukt-connect-fe.vercel.app/',
   credentials: true,
 }));
 
