@@ -8,7 +8,12 @@ const port=3000;
 const jwt=require('jsonwebtoken');
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
+const cors=require('cors');
 
+app.use(cors({
+    origin:'http://localhost:5173',
+    credentials:true
+}));
 
 const authRouter=require('./routers/auth');
 const profileRouter=require('./routers/profile');
