@@ -1,4 +1,7 @@
 const express=require('express');
+require('dotenv').config();
+const jwt_secret_key=process.env.JWT_SECRET_KEY;
+
 const authRouter=express.Router();
 const jwt=require('jsonwebtoken');
 const bcrypt=require('bcrypt');
@@ -34,7 +37,7 @@ authRouter.post("/login",async(req,res)=>{
         }
         const isPasswordValid=await bcrypt.compare(password,newuser.password);
         if(isPasswordValid){
-            const token=jwt.sign({_id:newuser._id},"rgukt@connects$790");
+            const token=jwt.sign({_id:newuser._id},`${jwt_secret_key}`);
             res.cookie("token",token);
             res.send(newuser);
         }else{

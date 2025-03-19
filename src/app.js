@@ -1,10 +1,11 @@
 const express=require('express');
 const connectdb=require('./config/database');
+require('dotenv').config();
+const port=process.env.PORT;
 const bcrypt=require('bcrypt');
 const User=require('./models/user');
 const app=express();
 app.use(express.json());
-const port=3000;
 const jwt=require('jsonwebtoken');
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
