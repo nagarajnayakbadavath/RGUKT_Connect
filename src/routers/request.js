@@ -3,16 +3,19 @@ requestRouter=express.Router();
 const userAuth=require('../middlewares/auth');
 const User=require('../models/user');
 const connectionRequest= require('../models/connectionRequestSchema');
+const mongoose=require('mongoose');
 
 
 requestRouter.post("/request/send/connect/:userId",userAuth,async(req,res)=>{
     try{
         const userId=req.params.userId;
-        const user=await User.findById(userId);
+        console.log(userId);   //This userId is that fellow to whom we want to send request with
+        const user=await User.findById(userId);   //for checking if user already exists or not
         if(!user){
             return res.status(400).send("user is not found by userId");
         }
         const senderId=req.user._id;
+        console.log(senderId);  //request senders id to check whether he/she sent request already or not
         const findAlreadySent=await connectionRequest.findOne({
             senderId,
             receiverId:userId,
@@ -22,6 +25,7 @@ requestRouter.post("/request/send/connect/:userId",userAuth,async(req,res)=>{
         }
         const firstName=req.user.firstName;
         const lastName=req.user.lastName;
+        const photourl=req.user.photourl;
 
         if(senderId===userId){
             return res.status(400).send("you cannot send a connection Request yourself");
@@ -32,7 +36,8 @@ requestRouter.post("/request/send/connect/:userId",userAuth,async(req,res)=>{
             receiverId:userId,
             firstName:firstName,
             lastName:lastName,
-            message:req.body.message || '',
+            photourl:photourl,
+            // message:req.body.message || '',
             status:'pending',
         });
         newRequest.save();
@@ -60,21 +65,9 @@ requestRouter.get("/requests/recieved",userAuth,async(req,res)=>{
 
 requestRouter.put("/request/:senderId/accept",userAuth,async(req,res)=>{
     try{
-        const myId=req.user._id;
-        const {senderId}=req.params;
-        console.log(senderId);
-        const request=await connectionRequest.findOne({receiverId:myId,
-            senderId,
-            status:'pending'});
-        if(!request){
-            return res.status(400).send("your are not requested or already gave the status");
-        }
-        const updatedRequest=await connectionRequest.findOneAndUpdate(
-            {_id:request._id},
-            {status:'accepted'},
-            {new:true}
-        );
-        res.send(updatedRequest);
+        const senderId=req.params.senderId;
+        const acceptedProfile=await connectionRequest.findOneAndUpdate({senderId:senderId},{status:'accepted'},{new:true});
+        res.send(acceptedProfile);
     }catch(err){
         res.status(400).send(err.message);
     }
@@ -84,20 +77,9 @@ requestRouter.put("/request/:senderId/accept",userAuth,async(req,res)=>{
 requestRouter.put("/request/:senderId/reject",userAuth,async(req,res)=>{
     try{
         const myId=req.user._id;
-        const {senderId}=req.params;
-        console.log(senderId);
-        const request=await connectionRequest.findOne({receiverId:myId,
-            senderId,
-            status:'pending'});
-        if(!request){
-            return res.status(400).send("your are not requested or already gave the status");
-        }
-        const updatedRequest=await connectionRequest.findOneAndUpdate(
-            {_id:request._id},
-            {status:'rejected'},
-            {new:true}
-        );
-        res.send(updatedRequest);
+        const senderId=req.params.senderId;
+        const rejectedProfiles=await connectionRequest.findOneAndUpdate({senderId:senderId},{status:'rejected'},{new:true});
+        res.send(rejectedProfiles);
     }catch(err){
         res.status(400).send(err.message);
     }

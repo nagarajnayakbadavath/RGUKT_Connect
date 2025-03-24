@@ -15,6 +15,10 @@ const connectionRequestSchema=new mongoose.Schema({
         type:String,
         required:true,
     },
+    photourl:{
+        type:String,
+        required:true,
+    },
     lastName:{
         type:String,
         required:true,
