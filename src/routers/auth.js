@@ -9,6 +9,9 @@ const User=require('../models/user');
 authRouter.use(express.json());
 const {validateSignupData}=require('../utils/validation');
 
+const cookieParser = require("cookie-parser");
+authRouter.use(cookieParser());
+
 authRouter.post("/signup",async(req,res)=>{
     try{
     validateSignupData(req);

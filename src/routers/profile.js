@@ -8,8 +8,9 @@ profileRouter.use(express.json());
 
 profileRouter.get("/profile/view",userAuth,async(req,res)=>{
     try{
-        const user=req.User;
-        res.send(user);
+        const user=req.user._id;
+        const loggedInprofile=await User.findById(user);
+        res.send(loggedInprofile);
     }catch(err){
         res.status(400).send("Error :"+err.message);
     }
@@ -18,19 +19,21 @@ profileRouter.get("/profile/view",userAuth,async(req,res)=>{
 profileRouter.get("/Allprofiles",userAuth,async(req,res)=>{
     try{
         const myId=req.user._id;   //logged person's id
-        console.log("My id is ",myId);
+        // console.log("My id is ",myId);
         const connectedProfile=await connectionRequest.find({$or:[{receiverId:myId},{senderId:myId}]});     //receiverId
         if(connectedProfile.length==0){
             //Here in this field comes only when the loggedIn user doesn't send or received any connection request
             //so in this case we just remove the myId
             const remainingId=await User.find({_id:{$nin:[myId]}});
-            res.send(remainingId);
+            return res.send(remainingId);
         }
         // //from connectedProfile i need senderId 
-        console.log("This are connected profiles",connectedProfile);
+        // console.log("This are connected profiles",connectedProfile);
         const requestedIds=connectedProfile.map(profile=>
             profile.senderId.toString()!==myId.toString()?profile.senderId:profile.receiverId);
-        console.log("filtered id's to exclude",requestedIds);
+
+        // console.log("filtered id's to exclude",requestedIds);
+
         const excludeIds=[myId,...requestedIds];
         const remainingProfiles=await User.find({_id:{$nin:excludeIds}});
         if(!remainingProfiles){
