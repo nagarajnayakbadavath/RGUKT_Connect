@@ -8,7 +8,9 @@ const userAuth=async(req,res,next)=>{
     //get the cookie form response
     
     try{
-    const {token}=req.cookies;
+    // const {token}=req.cookies;
+    let token = req.cookies.token;
+    console.log("The token we are getting from fe is",token);
     if(!token){
         throw new Error("token is invalid or null");
     }
