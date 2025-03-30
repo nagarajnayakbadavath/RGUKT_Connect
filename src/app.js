@@ -12,10 +12,14 @@ app.use(cookieParser());
 const cors=require('cors');
 
 app.use(cors({
-    // origin:'http://localhost:5173',
-    origin:'https://rguktconnect.netlify.app',
-    credentials:true
+    origin: 'https://rguktconnect.netlify.app', // Allow frontend origin
+    credentials: true, // Allow sending cookies & auth headers
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
+    allowedHeaders: ['Content-Type', 'Authorization'] // Allow required headers
 }));
+
+// Trust proxies for secure cookies
+app.set('trust proxy', 1);
 
 const authRouter=require('./routers/auth');
 const profileRouter=require('./routers/profile');
