@@ -12,7 +12,8 @@ app.use(cookieParser());
 const cors=require('cors');
 
 app.use(cors({
-    origin:'http://localhost:5173',
+    // origin:'http://localhost:5173',
+    origin:'https://rguktconnect.netlify.app',
     credentials:true
 }));
 
