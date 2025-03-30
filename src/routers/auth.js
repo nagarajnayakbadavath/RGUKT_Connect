@@ -42,7 +42,7 @@ authRouter.post("/login",async(req,res)=>{
         if(isPasswordValid){
             const token=jwt.sign({_id:newuser._id},`${jwt_secret_key}`);
             res.cookie("token",token);
-            res.send(newuser);
+            res.send({newuser,token});
         }else{
             res.send("login unsuccessfull");
         }
