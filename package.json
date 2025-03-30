@@ -4,7 +4,7 @@
   "description": "This is the Web Application for our RGUKT \r <br>\r For Easier Connetion between Alumni/Seniors and Students(Juniors).",
   "main": "index.js",
   "scripts": {
-    "bn": "nodemon node src/app.js",
+    "bn": "nodemon src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
