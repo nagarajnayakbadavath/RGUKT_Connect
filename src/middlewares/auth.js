@@ -12,14 +12,23 @@ const userAuth=async(req,res,next)=>{
     let token = req.cookies.token;
     console.log("The token we are getting from fe is",token);
     if(!token){
-        throw new Error("token is invalid or null");
+        const authHeader = req.headers.authorization;
+            if (authHeader && authHeader.startsWith("Bearer ")) {
+                token = authHeader.split(" ")[1]; // Extract token after 'Bearer '
+            }
     }
+
+    if (!token) {
+        throw new Error("Token is invalid or null");
+    }
+
     const obj=jwt.verify(token,`${jwt_secret_key}`);
     const {_id}=obj;
     const user=await User.findById(_id);
     if(!user){
         throw new Error("user is not found");
     }
+    console.log(user);
     req.user=user;
     next();
     }catch(err){
