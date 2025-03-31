@@ -14,7 +14,7 @@ authRouter.use(cookieParser());
 
 authRouter.post("/signup",async(req,res)=>{
     try{
-    validateSignupData(req);
+    // validateSignupData(req);
     const {firstName,lastName,emailId,password,about}=req.body;
     const passwordHash=await bcrypt.hash(password,10); 
     const user=new User({
@@ -25,7 +25,7 @@ authRouter.post("/signup",async(req,res)=>{
         about,
     });
     await user.save();
-    res.send(user);
+    res.status(200).send(user);
     }catch(err){
         res.status(400).send("not enetered the user");
     }
@@ -44,10 +44,10 @@ authRouter.post("/login",async(req,res)=>{
             res.cookie("token",token);
             res.send({newuser,token});
         }else{
-            res.send("login unsuccessfull");
+            return res.status(401).json({ message: "Invalid email or password" });
         }
     }catch(err){
-        res.status(400).send(err.message);
+        res.status(401).send(err.message);
     }
 });
 
