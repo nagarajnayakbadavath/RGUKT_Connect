@@ -45,6 +45,15 @@ profileRouter.get("/Allprofiles",userAuth,async(req,res)=>{
     }
 });
 
+profileRouter.get("/Carouselprofiles",async(req,res)=>{
+    try{
+        const users=await User.find({});
+        res.send(users);
+    }catch(err){
+        res.status(400).send(err.message);
+    }
+});
+
 profileRouter.put("/profile/edit",userAuth,async(req,res)=>{
     try{
         const {firstName,lastName,about,photourl,skills}=req.body;

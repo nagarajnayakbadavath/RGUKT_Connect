@@ -14,11 +14,15 @@ const http=require('http');
 
 
 
+// app.use(cors({
+//     origin: 'https://rguktconnect.netlify.app',
+//     credentials: true, // Allow sending cookies & auth headers
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
+//     allowedHeaders: ['Content-Type', 'Authorization'] // Allow required headers
+// }));
 app.use(cors({
-    origin: 'https://rguktconnect.netlify.app',
-    credentials: true, // Allow sending cookies & auth headers
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
-    allowedHeaders: ['Content-Type', 'Authorization'] // Allow required headers
+    origin:' http://localhost:5173/',
+    credentials:true,
 }));
 
 // Trust proxies for secure cookies
