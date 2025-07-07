@@ -11,6 +11,8 @@ const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 const cors=require('cors');
 const http=require('http');
+const otpRouter = require('./routers/otp');
+
 
 
 
@@ -20,8 +22,9 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
     allowedHeaders: ['Content-Type', 'Authorization'] // Allow required headers
 }));
+
 // app.use(cors({
-//     origin:' http://localhost:5173/',
+//     origin:' http://localhost:5173',
 //     credentials:true,
 // }));
 
@@ -36,6 +39,8 @@ const initializeSocket = require('./utils/socket');
 app.use("/",profileRouter);
 app.use("/",authRouter);
 app.use("/",requestRouter);
+app.use("/", otpRouter);
+
 
 const server=http.createServer(app);
 initializeSocket(server);
