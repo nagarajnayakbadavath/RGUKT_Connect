@@ -1,0 +1,157 @@
+
+
+
+What is a branch?
+
+Branches allow multiple people to 
+work on different features, bug fixes, or experiments simultaneously.
+
+-master is the branch where all codes where commited altogether after verified
+made changes to main 
+
+-what is fork?
+-what is pull request?
+-what is clone?
+
+
+
+Schema
+
+A schema defines the structure of a MongoDB document.
+
+Think of it like a blueprint or template for your data.
+
+You can specify:
+
+Field names
+
+Data types
+
+Validation rules
+
+Default values
+
+
+const mongoose = require('mongoose');
+
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  age: Number,
+});
+
+Model
+
+A model is a compiled version of the schema.
+
+It is a class that gives you methods to interact with the database (CRUD operations).
+
+You create a model using mongoose.model('CollectionName', schema).
+
+The model represents a collection in MongoDB.
+
+const User = mongoose.model('User', userSchema);
+
+Here, User is the model.
+
+MongoDB will create/use a collection named users (plural, lowercase).
+
+Schema → Model → Document
+Blueprint → Class → Instance
+
+
+
+Mongoose models provide several static helper functions for CRUD operations.
+
+
+Model.findById(id)
+User.findById("64e8f1a2c1234567890abcd");
+-Returns a single document by its _id.
+
+Model.find(filter)
+Returns all documents that match the filter.
+User.find({ age: { $gt: 18 } });
+
+
+Model.findOne(filter)
+Returns the first document that matches the filter.
+User.findOne({ email: "test@example.com" });
+Stops searching after finding the first match.
+
+2.Delete
+
+
+Model.deleteMany(filter)
+Deletes all documents matching the filter.
+
+User.deleteMany({ age: { $lt: 18 } });
+
+Model.deleteOne(filter)
+Deletes the first document matching the filter.
+
+User.deleteOne({ email: "abc@example.com" });
+
+Model.findByIdAndDelete(id)
+Deletes a document by its _id and returns the deleted doc.
+
+Model.findOneAndDelete(filter)
+Deletes the first document matching the filter and returns it.
+
+Model.updateOne(filter, update)
+Updates the first document matching the filter.
+
+Model.updateMany(filter, update)
+Updates all documents matching the filter.
+
+Model.findByIdAndUpdate(id, update)
+Finds a document by _id and updates it.
+
+Model.findOneAndUpdate(filter, update)
+Finds the first document matching filter and updates it.
+
+Validation is defined in the SchemaType
+Validation is middleware. Mongoose registers validation as a pre('save') hook on every schema by default.
+
+
+
+What is Normalisation?
+
+Normalisation is a process dividing the table into two or more tables to reduce the 
+data redundancey and maintain consistency of the data..
+This process is known as Normalisation.
+
+The problem before normalised table will before
+
+insertion anamoly
+updation anamoly
+deletion anamoly
+
+First Normal Form
+-atomicity (Attribute should be single valued)
+-Each row should be uniquely identified
+
+
+Second Normal Form
+
+Must already be in 1NF
+No partial dependency → no non-prime attribute should depend on part of a composite primary key
+
+Third Normal Form
+Must already be in 2NF.
+No transitive dependency → non-prime attributes should not depend on other non-prime attributes.
+
+Boyce code Normal Form
+Stronger than 3NF.
+
+For every functional dependency (X → Y), X must be a super key.
+
+what is DeNormalisation?
+
+DeNormalisation is the opposite to Normalisation.Where we intentionally add data redundance 
+to improve query performance..
+
+
+Lossy Decomposition
+
+When a table is divided into two or more tables while making the Normalisation
+The data will be lost and rejoining of tables does not get the relation.

@@ -6,9 +6,14 @@ const authRouter=express.Router();
 const jwt=require('jsonwebtoken');
 const bcrypt=require('bcrypt');
 const User=require('../models/user');
+
+// this is like body parser which will hadle text,json etc parsers the body which we send from frontend
 authRouter.use(express.json());
+
 const {validateSignupData}=require('../utils/validation');
 
+
+//this is for cookie parsing without this cookie will not parsed they will be undefined
 const cookieParser = require("cookie-parser");
 authRouter.use(cookieParser());
 
